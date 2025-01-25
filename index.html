@@ -26,6 +26,7 @@
  </div>
 </div> -->
 
+
 <div class="ps5_intro" id="ps5_intro">
   <div id="initial_logo"><i class="fab fa-playstation"></i></div>
 
@@ -44,7 +45,7 @@
 
   <!-- Boot-up video (hidden initially) -->
   <div id="video-container" style="display: none;">
-    <video id="boot-video" src="C:\Users\7000039268\EchoPlay-Client\PlayMain\Ps-Boot.mp4" autoplay></video>
+    <video id="boot-video" src="/Users/jai/Jai Files/echo/ps/Ps-Boot.mp4" autoplay></video>
   </div>
 </div>
 
@@ -354,16 +355,22 @@
               </div> -->
 
               <div class="player_progress_card" id="all_trophies" style="position: relative; margin: 2rem auto; height: 350px; width: 430px;">
-                <!-- New image acting as a button to reveal controls -->
-                <img id="epButton" src="C:\Users\7000039268\EchoPlay-Client\PlayMain\ps.png" 
+                <!-- PlayStation button to show the controller -->
+                <img id="epButton" src="ps.png" 
                      style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); width: 100%; height: 85%; object-fit: contain; background: none; border: none; cursor: pointer;" 
                      onclick="showControls()">
                 
-                <!-- Hidden controls initially with fade-in effect -->
+                <!-- Controller image with hidden controls -->
                 <div id="controls" style="display: none; opacity: 0; transition: opacity 1s ease-in;">
-                    <img id="all_trophies_img" src="C:\Users\7000039268\EchoPlay-Client\PlayMain\image.png" 
+                    <img id="controllerImage" src="image.png" 
                          style="position: absolute; top: 10%; left: 50%; transform: translateX(-50%); width: 100%; height: 85%; object-fit: contain; background: none; border: none;">
                     
+                    <!-- Small LED indicator below the PS logo -->
+                    <div id="ledIndicator" class="led-indicator"></div>
+                    
+                    <!-- Clickable area for the PS logo -->
+                    <div id="psButton" class="ps-click-area"></div>
+            
                     <button id="startBtn" class="led-button blue" disabled>
                         <span class="material-icons mic-icon" id="micIcon">mic</span>
                     </button>
@@ -377,64 +384,6 @@
                     </div>
                 </div>
             </div>
-            
-            <script>
-                // Function to show controls when the button is clicked
-                function showControls() {
-                    // Show the controls with a fade-in effect
-                    const controls = document.getElementById("controls");
-                    controls.style.display = "block";
-                    setTimeout(() => {
-                        controls.style.opacity = 1;
-                    }, 10); // Small delay for transition to take effect
-                    
-                    // Hide the button once clicked
-                    document.getElementById("epButton").style.display = "none"; 
-            
-                    // Trigger the glowing spark effect
-                    const button = document.getElementById("epButton");
-                    button.classList.add("glowEffect");
-            
-                    // Remove the glow effect after it finishes
-                    setTimeout(() => {
-                        button.classList.remove("glowEffect");
-                    }, 1000); // Duration of the glow effect
-                }
-            </script>
-            
-            <style>
-                /* Add subtle glowing effect when the button is clicked */
-                @keyframes glowAnimation {
-                    0% {
-                        box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.3), 0 0 10px 0 rgba(255, 255, 255, 0.2);
-                    }
-                    50% {
-                        box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8), 0 0 20px 10px rgba(255, 255, 255, 0.6);
-                    }
-                    100% {
-                        box-shadow: 0 0 5px 0 rgba(255, 255, 255, 0.3), 0 0 10px 0 rgba(255, 255, 255, 0.2);
-                    }
-                }
-            
-                .glowEffect {
-                    animation: glowAnimation 1s ease-in-out;
-                }
-            
-                /* Remove background from controls and just focus on fade-in transition */
-                #controls {
-                    border-radius: 8px;
-                    padding: 10px;
-                    position: absolute;
-                    top: 10%;
-                    left: 50%;
-                    transform: translateX(-50%); /* Center the controls */
-                    width: 100%;
-                    height: 85%;
-                    transition: opacity 1s ease-in-out; /* Fade-in transition */
-                }
-            </style>
-            
-            
             
             
             

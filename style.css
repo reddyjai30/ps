@@ -1520,3 +1520,118 @@ font-size: 24px; /* Font size */
 font-weight: bold; /* Bold text */
 z-index: 10;
 }
+
+/* Styling the LED indicator below the PS logo */
+.led-indicator {
+  position: absolute;
+  top: 58%; /* Adjusted position to align below the PS logo */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;  /* Small rectangle width */
+  height: 10px; /* Small rectangle height */
+  background-color: red; /* Default to red (stopped) */
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  pointer-events: none; /* Ensures it doesn't interfere with clicks */
+}
+
+/* Green glowing effect when recording */
+.led-indicator.green {
+  background-color: green;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+}
+
+/* Clickable area for the PS logo */
+.ps-click-area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+/* Fade-in effect for controls */
+#controls {
+  border-radius: 8px;
+  padding: 10px;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 85%;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Change main container background */
+.ps5_ui {
+  background-color: #121212;
+}
+
+/* Darken action details section */
+.foreground .fg_home_content .games_actions_details {
+  background-color: #1a1a1a;
+}
+
+/* Update text to white */
+.foreground .fg_home_content .games_actions_details .games_actions span,
+.foreground .fg_home_content .games_actions_details .games_details .header {
+  color: #fff;
+}
+
+/* Modify the white rectangle background */
+.background .bg_home_content .white_rect {
+  background-color: #1a1a1a;
+}
+
+/* Update notification text colors */
+.foreground .notification_text {
+  color: #fff;
+}
+
+
+
+/* Ensure all text in dark mode appears white */
+.foreground .fg_home_content .games_details .header h1,
+.foreground .fg_home_content .games_details .header p,
+.foreground .fg_home_content .games_actions span,
+.foreground .notification_text p,
+.foreground .notification_text h1,
+.foreground .top_bar .tab,
+.foreground .top_bar #time {
+  color: #fff !important;
+}
+
+.foreground .fg_home_content .games_actions_details {
+  color: #fff !important;
+}
+
+/* Stretch the game background down to cover the whole section */
+.background .bg_home_content #game_bg {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.background .bg_home_content .white_rect {
+  display: none; /* Hide the white rectangle that separates the sections */
+}
+
+.foreground .fg_home_content .games_actions_details {
+  background: transparent; /* Ensure the section below blends with the background */
+}
+
+/* Add a subtle dark overlay to improve text visibility */
+.background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -1;
+}

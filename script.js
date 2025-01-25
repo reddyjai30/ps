@@ -9,7 +9,7 @@ const ps5_ui = document.getElementById("ps5_ui");
 
 // Create a video element for the boot-up video
 const bootVideo = document.createElement("video");
-bootVideo.src = "C:\\Users\\7000039268\\EchoPlay-Client\\PlayMain\\Ps-Boot.mp4"; // Replace with the actual video path
+bootVideo.src = "/Users/jai/Jai Files/echo/ps/Ps-Boot.mp4"; // Replace with the actual video path
 bootVideo.style.position = "fixed";
 bootVideo.style.top = "0";
 bootVideo.style.left = "0";
@@ -761,37 +761,6 @@ playstation.addEventListener("click", () => {
 
     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     function updateContent() {
       var i = flkty.selectedIndex;
       document.getElementById("game_bg").style.backgroundImage =
@@ -817,3 +786,31 @@ playstation.addEventListener("click", () => {
     slider.on("change.flickity", updateContent);
   });
 })(jQuery);
+
+// Show the controller with fade-in effect
+function showControls() {
+  const controls = document.getElementById("controls");
+  controls.style.display = "block";
+  setTimeout(() => {
+      controls.style.opacity = 1;
+  }, 10);
+
+  // Hide the intro button once clicked
+  document.getElementById("epButton").style.display = "none";
+}
+
+let isListening = false;
+
+// Toggle listening mode when PS button is clicked
+document.getElementById("psButton").addEventListener("click", () => {
+  isListening = !isListening;
+  const ledIndicator = document.getElementById("ledIndicator");
+
+  if (isListening) {
+      ledIndicator.classList.add("green");
+      ledIndicator.setAttribute("title", "Listening...");
+  } else {
+      ledIndicator.classList.remove("green");
+      ledIndicator.setAttribute("title", "Stopped Listening");
+  }
+});
