@@ -9,7 +9,7 @@ const ps5_ui = document.getElementById("ps5_ui");
 
 // Create a video element for the boot-up video
 const bootVideo = document.createElement("video");
-bootVideo.src = "/Users/jai/Jai Files/echo/ps/Ps-Boot.mp4"; // Replace with the actual video path
+bootVideo.src = "C:/Users/7000039265/Desktop/front final/ps/Ps-Boot.mp4"; // Replace with the actual video path
 bootVideo.style.position = "fixed";
 bootVideo.style.top = "0";
 bootVideo.style.left = "0";
@@ -540,224 +540,224 @@ FontAwesome.library.add(
 
 
 
-    const playstation = document.getElementById("playstation");
-    const disconnectBtn = document.getElementById("disconnectBtn");
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-    const micIcon = document.getElementById("micIcon");
-    const stopMicIcon = document.getElementById("stopMicIcon");
-    const responsesList = document.getElementById("responsesList");
-    const audioPlayback = document.getElementById("audioPlayback");
+//     const playstation = document.getElementById("playstation");
+//     const disconnectBtn = document.getElementById("disconnectBtn");
+//     const startBtn = document.getElementById("startBtn");
+//     const stopBtn = document.getElementById("stopBtn");
+//     const micIcon = document.getElementById("micIcon");
+//     const stopMicIcon = document.getElementById("stopMicIcon");
+//     const responsesList = document.getElementById("responsesList");
+//     const audioPlayback = document.getElementById("audioPlayback");
 
-    let socket;
-    let mediaRecorder;
-    let audioChunks = [];
-    let sessionId;
+//     let socket;
+//     let mediaRecorder;
+//     let audioChunks = [];
+//     let sessionId;
 
-    async function convertToLinear16(blob) {
-        const audioContext = new AudioContext({ sampleRate: 48000 });
-        const arrayBuffer = await blob.arrayBuffer();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+//     async function convertToLinear16(blob) {
+//         const audioContext = new AudioContext({ sampleRate: 48000 });
+//         const arrayBuffer = await blob.arrayBuffer();
+//         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
-        const offlineContext = new OfflineAudioContext(
-            audioBuffer.numberOfChannels,
-            audioBuffer.duration * 48000,
-            48000
-        );
+//         const offlineContext = new OfflineAudioContext(
+//             audioBuffer.numberOfChannels,
+//             audioBuffer.duration * 48000,
+//             48000
+//         );
 
-        const bufferSource = offlineContext.createBufferSource();
-        bufferSource.buffer = audioBuffer;
-        bufferSource.connect(offlineContext.destination);
-        bufferSource.start(0);
+//         const bufferSource = offlineContext.createBufferSource();
+//         bufferSource.buffer = audioBuffer;
+//         bufferSource.connect(offlineContext.destination);
+//         bufferSource.start(0);
 
-        const renderedBuffer = await offlineContext.startRendering();
-        const linear16Data = interleave(renderedBuffer);
+//         const renderedBuffer = await offlineContext.startRendering();
+//         const linear16Data = interleave(renderedBuffer);
 
-        return linear16Data;
-    }
+//         return linear16Data;
+//     }
 
-    function interleave(buffer) {
-        const channels = buffer.numberOfChannels;
-        const samples = buffer.length * channels;
-        const output = new Int16Array(samples);
+//     function interleave(buffer) {
+//         const channels = buffer.numberOfChannels;
+//         const samples = buffer.length * channels;
+//         const output = new Int16Array(samples);
 
-        let index = 0;
-        for (let i = 0; i < buffer.length; i++) {
-            for (let j = 0; j < channels; j++) {
-                let sample = buffer.getChannelData(j)[i];
-                sample = Math.max(-1, Math.min(1, sample));
-                output[index++] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
-            }
-        }
-        return output;
-    }
+//         let index = 0;
+//         for (let i = 0; i < buffer.length; i++) {
+//             for (let j = 0; j < channels; j++) {
+//                 let sample = buffer.getChannelData(j)[i];
+//                 sample = Math.max(-1, Math.min(1, sample));
+//                 output[index++] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+//             }
+//         }
+//         return output;
+//     }
 
 
-    startBtn.style.display = "none";
-    stopBtn.style.display = "none";
+//     startBtn.style.display = "none";
+//     stopBtn.style.display = "none";
     
-// // Connect Button Logic
-// playstation.addEventListener("click", () => {
-//     sessionId = `session-${Date.now()}`;
-//     socket = new WebSocket("ws://localhost:8080/ws/voice");
+// // // Connect Button Logic
+// // playstation.addEventListener("click", () => {
+// //     sessionId = `session-${Date.now()}`;
+// //     socket = new WebSocket("ws://localhost:8080/ws/voice");
    
-//     socket.onopen = () => {
-//         console.log("WebSocket connection established.");
-//         playstation.disabled = true;
-//         disconnectBtn.disabled = false;
+// //     socket.onopen = () => {
+// //         console.log("WebSocket connection established.");
+// //         playstation.disabled = true;
+// //         disconnectBtn.disabled = false;
 
-//         // Show mic buttons
-//         startBtn.style.display = "inline-block";
-//         stopBtn.style.display = "inline-block";
+// //         // Show mic buttons
+// //         startBtn.style.display = "inline-block";
+// //         stopBtn.style.display = "inline-block";
+// //     };
+
+// //     socket.onerror = (error) => {
+// //         console.error("WebSocket error:", error);
+// //     };
+// // });
+
+// // Disconnect Button Logic
+// disconnectBtn.addEventListener("click", () => {
+//     if (socket && socket.readyState === WebSocket.OPEN) {
+//         socket.close();
+//         console.log("Session ended.");
+//     }
+
+//     playstation.disabled = false;
+//     disconnectBtn.disabled = true;
+
+//     // Hide mic buttons
+//     startBtn.style.display = "none";
+//     stopBtn.style.display = "none";
+//     // li.style.display="none";
+// });
+
+// playstation.addEventListener("click", () => {
+//         sessionId = `session-${Date.now()}`;
+//         socket = new WebSocket("ws://localhost:8080/ws/voice");
+
+//         socket.onopen = () => {
+//             console.log("WebSocket connection established.");
+//             playstation.disabled = true;
+//             disconnectBtn.disabled = false;
+//             startBtn.disabled = false;
+//             startBtn.style.display = "inline-block";
+//             stopBtn.style.display = "inline-block";
 //     };
 
 //     socket.onerror = (error) => {
 //         console.error("WebSocket error:", error);
 //     };
-// });
 
-// Disconnect Button Logic
-disconnectBtn.addEventListener("click", () => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-        socket.close();
-        console.log("Session ended.");
-    }
-
-    playstation.disabled = false;
-    disconnectBtn.disabled = true;
-
-    // Hide mic buttons
-    startBtn.style.display = "none";
-    stopBtn.style.display = "none";
-    // li.style.display="none";
-});
-
-playstation.addEventListener("click", () => {
-        sessionId = `session-${Date.now()}`;
-        socket = new WebSocket("ws://localhost:8080/ws/voice");
-
-        socket.onopen = () => {
-            console.log("WebSocket connection established.");
-            playstation.disabled = true;
-            disconnectBtn.disabled = false;
-            startBtn.disabled = false;
-            startBtn.style.display = "inline-block";
-            stopBtn.style.display = "inline-block";
-    };
-
-    socket.onerror = (error) => {
-        console.error("WebSocket error:", error);
-    };
-
-        socket.onmessage = (event) => {
-            const serverMessage = JSON.parse(event.data);
-            if (serverMessage.response) {
-                console.log("Server response:", serverMessage.response);
-                responsesList.innerHTML = "";
-                const li = document.createElement("li");
-                li.textContent = serverMessage.response;
-                responsesList.appendChild(li);
+//         socket.onmessage = (event) => {
+//             const serverMessage = JSON.parse(event.data);
+//             if (serverMessage.response) {
+//                 console.log("Server response:", serverMessage.response);
+//                 responsesList.innerHTML = "";
+//                 const li = document.createElement("li");
+//                 li.textContent = serverMessage.response;
+//                 responsesList.appendChild(li);
 
 
-                if (serverMessage.response.toLowerCase().includes("opening")) { 
-                // Extract the name after 'opening' in the response
-                const match = serverMessage.response.toLowerCase().match(/opening\s+(.+)/);
+//                 if (serverMessage.response.toLowerCase().includes("opening")) { 
+//                 // Extract the name after 'opening' in the response
+//                 const match = serverMessage.response.toLowerCase().match(/opening\s+(.+)/);
 
-                // const match = serverMessage.response.toLowerCase().match(/opening (.+)/);
-                console.log(match)
+//                 // const match = serverMessage.response.toLowerCase().match(/opening (.+)/);
+//                 console.log(match)
 
-                if (match) {
-                        const name = match[1]||match[1][1]; // Capture the name (e.g., "gopi")
-                        console.log(name)
-                        window.open(`search.html?name=${name}`,"_blank");
-                 }
-}
+//                 if (match) {
+//                         const name = match[1]||match[1][1]; // Capture the name (e.g., "gopi")
+//                         console.log(name)
+//                         window.open(`search.html?name=${name}`,"_blank");
+//                  }
+// }
 
-            }
-        };
+//             }
+//         };
 
-        socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
-        };
+//         socket.onerror = (error) => {
+//             console.error("WebSocket error:", error);
+//         };
 
-        socket.onclose = () => {
-            console.log("WebSocket connection closed.");
-            playstation.disabled = false;
-            disconnectBtn.disabled = true;
-            startBtn.disabled = true;
-            stopBtn.disabled = true;
-        };
-    });
+//         socket.onclose = () => {
+//             console.log("WebSocket connection closed.");
+//             playstation.disabled = false;
+//             disconnectBtn.disabled = true;
+//             startBtn.disabled = true;
+//             stopBtn.disabled = true;
+//         };
+//     });
 
-    disconnectBtn.addEventListener("click", () => {
-        if (socket && socket.readyState === WebSocket.OPEN) {
-            socket.close();
-            console.log("Session ended.");
-        }
-    });
+//     disconnectBtn.addEventListener("click", () => {
+//         if (socket && socket.readyState === WebSocket.OPEN) {
+//             socket.close();
+//             console.log("Session ended.");
+//         }
+//     });
 
-    startBtn.addEventListener("click", async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
+    // startBtn.addEventListener("click", async () => {
+    //     try {
+    //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    //         mediaRecorder = new MediaRecorder(stream);
 
-            mediaRecorder.ondataavailable = (event) => {
-                audioChunks.push(event.data);
-            };
+    //         mediaRecorder.ondataavailable = (event) => {
+    //             audioChunks.push(event.data);
+    //         };
 
-            mediaRecorder.start();
-            console.log("Recording started.");
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            micIcon.classList.add("pulse");
-        } catch (error) {
-            console.error("Error starting recording:", error);
-        }
-    });
+    //         mediaRecorder.start();
+    //         console.log("Recording started.");
+    //         startBtn.disabled = true;
+    //         stopBtn.disabled = false;
+    //         micIcon.classList.add("pulse");
+    //     } catch (error) {
+    //         console.error("Error starting recording:", error);
+    //     }
+    // });
 
-    stopBtn.addEventListener("click", async () => {
-        if (mediaRecorder.state !== "recording") return;
+    // stopBtn.addEventListener("click", async () => {
+    //     if (mediaRecorder.state !== "recording") return;
 
-        mediaRecorder.stop();
-        console.log("Recording stopped, preparing audio...");
+    //     mediaRecorder.stop();
+    //     console.log("Recording stopped, preparing audio...");
 
-        mediaRecorder.onstop = async () => {
-            const blob = new Blob(audioChunks, { type: "audio/wav" });
-            const linear16Data = await convertToLinear16(blob);
-            const audioBlob = new Blob([linear16Data], { type: "audio/l16" });
-            const audioURL = URL.createObjectURL(blob);
+    //     mediaRecorder.onstop = async () => {
+    //         const blob = new Blob(audioChunks, { type: "audio/wav" });
+    //         const linear16Data = await convertToLinear16(blob);
+    //         const audioBlob = new Blob([linear16Data], { type: "audio/l16" });
+    //         const audioURL = URL.createObjectURL(blob);
 
 
-            if (audioPlayback.src) {
-            audioPlayback.pause(); // Stop any ongoing playback
-            audioPlayback.src = ""; // Clear the previous source
-              }
-            audioPlayback.src = audioURL;
-            audioPlayback.style.display = "block";
-            // audioPlayback.play();
+    //         if (audioPlayback.src) {
+    //         audioPlayback.pause(); // Stop any ongoing playback
+    //         audioPlayback.src = ""; // Clear the previous source
+    //           }
+    //         audioPlayback.src = audioURL;
+    //         audioPlayback.style.display = "block";
+    //         // audioPlayback.play();
 
-            const arrayBuffer = await audioBlob.arrayBuffer();
-            const message = {
-                sessionId: sessionId,
-                rawData: Array.from(new Uint8Array(arrayBuffer)),
-                isFinal: true,
-            };
+    //         const arrayBuffer = await audioBlob.arrayBuffer();
+    //         const message = {
+    //             sessionId: sessionId,
+    //             rawData: Array.from(new Uint8Array(arrayBuffer)),
+    //             isFinal: true,
+    //         };
 
-            if (socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify(message));
-                console.log("Raw audio data sent to server:", message);
-            } else {
-                console.warn("WebSocket is not open. Unable to send audio.");
-            }
+    //         if (socket.readyState === WebSocket.OPEN) {
+    //             socket.send(JSON.stringify(message));
+    //             console.log("Raw audio data sent to server:", message);
+    //         } else {
+    //             console.warn("WebSocket is not open. Unable to send audio.");
+    //         }
 
-            audioChunks = [];
-            startBtn.disabled = false;
-            stopBtn.disabled = true;
-            micIcon.classList.remove("pulse");
-            stopMicIcon.classList.add("bounce");
-            setTimeout(() => stopMicIcon.classList.remove("bounce"), 300);
-        };
-    });
+    //         audioChunks = [];
+    //         startBtn.disabled = false;
+    //         stopBtn.disabled = true;
+    //         micIcon.classList.remove("pulse");
+    //         stopMicIcon.classList.add("bounce");
+    //         setTimeout(() => stopMicIcon.classList.remove("bounce"), 300);
+    //     };
+    // });
 
     
 
@@ -799,18 +799,175 @@ function showControls() {
   document.getElementById("epButton").style.display = "none";
 }
 
-let isListening = false;
+
 
 // Toggle listening mode when PS button is clicked
-document.getElementById("psButton").addEventListener("click", () => {
-  isListening = !isListening;
-  const ledIndicator = document.getElementById("ledIndicator");
+// document.getElementById("psButton").addEventListener("click", () => {
+//   isListening = !isListening;
+//   const ledIndicator = document.getElementById("ledIndicator");
 
-  if (isListening) {
-      ledIndicator.classList.add("green");
-      ledIndicator.setAttribute("title", "Listening...");
-  } else {
-      ledIndicator.classList.remove("green");
-      ledIndicator.setAttribute("title", "Stopped Listening");
-  }
+//   if (isListening) {
+//       ledIndicator.classList.add("green");
+//       ledIndicator.setAttribute("title", "Listening...");
+//   } else {
+//       ledIndicator.classList.remove("green");
+//       ledIndicator.setAttribute("title", "Stopped Listening");
+//   }
+// });
+
+
+let isListening = false;
+let mediaRecorder;
+let audioChunks = [];
+let socket;
+
+// Retrieve session ID from localStorage, or generate a new one if it doesn't exist
+let sessionId = localStorage.getItem("sessionId") || `session-${Date.now()}`;
+localStorage.setItem("sessionId", sessionId); // Store the session ID to persist it until page refresh
+
+// WebSocket Initialization
+function initializeWebSocket() {
+    socket = new WebSocket("ws://localhost:8080/ws/voice");
+
+    socket.onopen = () => {
+        // console.log("WebSocket connection established.");
+    };
+
+    socket.onmessage = (event) => {
+        console.log("Message received from server:", event.data);
+    };
+
+    socket.onerror = (error) => {
+        console.error("WebSocket error:", error);
+    };
+
+    socket.onclose = () => {
+        console.log("WebSocket connection closed.");
+    };
+}
+
+// Audio Conversion to Linear16
+async function convertToLinear16(blob) {
+    const audioContext = new AudioContext({ sampleRate: 48000 });
+    const arrayBuffer = await blob.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+    const offlineContext = new OfflineAudioContext(
+        audioBuffer.numberOfChannels,
+        audioBuffer.duration * 48000,
+        48000
+    );
+
+    const bufferSource = offlineContext.createBufferSource();
+    bufferSource.buffer = audioBuffer;
+    bufferSource.connect(offlineContext.destination);
+    bufferSource.start(0);
+
+    const renderedBuffer = await offlineContext.startRendering();
+    return interleave(renderedBuffer);
+}
+
+function interleave(buffer) {
+    const channels = buffer.numberOfChannels;
+    const samples = buffer.length * channels;
+    const output = new Int16Array(samples);
+
+    let index = 0;
+    for (let i = 0; i < buffer.length; i++) {
+        for (let j = 0; j < channels; j++) {
+            let sample = buffer.getChannelData(j)[i];
+            sample = Math.max(-1, Math.min(1, sample));
+            output[index++] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+        }
+    }
+    return output;
+}
+
+// Initialize WebSocket
+const playstationButton = document.getElementById("playstation"); // PlayStation button
+const psButton = document.getElementById("psButton"); // PS Button
+const ledIndicator = document.getElementById("ledIndicator"); // LED indicator
+const audioPlayback = document.getElementById("audioPlayback"); // Audio playback element
+
+// PlayStation Button to initialize WebSocket
+playstationButton.addEventListener("click", () => {
+    initializeWebSocket();  // Establish WebSocket connection
+
+    playstationButton.disabled = true; // Disable the PlayStation button after click
+    psButton.disabled = false; // Enable PS Button
+    console.log("WebSocket connection established.");
+});
+
+// PS Button to start/stop recording and send audio data
+psButton.addEventListener("click", async () => {
+    isListening = !isListening;
+
+    if (isListening) {
+        // Start Recording
+        ledIndicator.classList.add("green");
+        ledIndicator.setAttribute("title", "Listening...");
+
+        try {
+            // Start recording
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.start();
+            console.log("session Id:",sessionId);
+             
+            console.log("Recording started.");
+        } catch (error) {
+            console.error("Error starting recording:", error);
+            isListening = false;
+            ledIndicator.classList.remove("green");
+            ledIndicator.setAttribute("title", "Error: Could not start recording.");
+        }
+    } else {
+        // Stop Recording and send audio
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+            console.log("Recording stopped, preparing audio...");
+
+            mediaRecorder.onstop = async () => {
+                const blob = new Blob(audioChunks, { type: "audio/wav" });
+                const linear16Data = await convertToLinear16(blob);
+                const audioBlob = new Blob([linear16Data], { type: "audio/l16" });
+
+                const audioURL = URL.createObjectURL(blob);
+
+                // Play the audio locally
+                // if (audioPlayback.src) {
+                //     audioPlayback.pause();
+                //     audioPlayback.src = "";
+                // }
+                // audioPlayback.src = audioURL;
+                // audioPlayback.style.display = "block";
+
+                // Convert Blob to ArrayBuffer and prepare the message
+                const arrayBuffer = await audioBlob.arrayBuffer();
+                const message = {
+                    sessionId: sessionId, // Use the same session ID from localStorage
+                    rawData: Array.from(new Uint8Array(arrayBuffer)),
+                    isFinal: true
+                };
+
+                // Send to WebSocket server
+                if (socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify(message));
+                    console.log("Raw audio data sent to server:", message);
+                } else {
+                    console.warn("WebSocket is not open. Unable to send audio.");
+                }
+
+                audioChunks = []; // Clear the audio chunks
+                ledIndicator.classList.remove("green");
+                ledIndicator.setAttribute("title", "Stopped Listening");
+            };
+        }
+    }
 });
