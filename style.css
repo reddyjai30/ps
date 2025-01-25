@@ -1272,78 +1272,6 @@ button {
   outline: none;
   position: relative;
 }
-.mic-icon {
-  font-size: 70px;
-  color: #05f70d; /* Green color */
-  transition: transform 0.2s ease-in-out;
-  position:center;
-  top:-30%;
-  left: 50%;
-  transform: translate(50%, -8%);
-  
-  
-}
-.mic-icon.red {
-  color: #070707; /* Red color */
-  transition: transform 0.2s ease-in-out;
-  position:center;
-  width:10px;
-  top:20%;
-  left: 50%;
-  transform: translate(100%, 0%);
-  
-
-}
-.mic-icon.pulse {
-  animation: pulse-effect 2s infinite;
-  align-items: center;
-}
-@keyframes pulse-effect {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(2.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-.mic-icon.bounce {
-  animation: bounce-effect 0.3s;
-  top:100px;
-left: 300px;
-align-items: center;
-}
-@keyframes bounce-effect {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-30px);
-  }
-  100% {
-    transform: translateY(0);
-  }
-}
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(76, 175, 80, 0.5); /* Green ripple */
-  width: 100px;
-  height: 100px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  animation: ripple-effect 0.6s ease-out forwards infinite;
-  z-index: -1;
-}
-@keyframes ripple-effect {
-  to {
-    transform: translate(-50%, -50%) scale(3);
-    opacity: 0;
-  }
-}
 .responses {
   margin-top: 80%;
   left: 60%;
@@ -1377,26 +1305,7 @@ ul {
   align-items: center;
   border-radius: 5px; /* Optional: Add rounded corners */
 }
-#startBtn {
-  margin-right: 200px; /* Increase spacing between buttons */
-  position: absolute;
-  top: 170px; /* Adjust this value to position it vertically */
-  left: 515px; /* Adjust this value to position it horizontally */
-  z-index: 10; 
-  width: 10px;
-       
-      
-}
-#stopBtn {
-  margin-left: 200px; 
-  position: absolute;
-  top: 270px; /* Adjust this value to position it vertically */
-  left: 480px;/* Adjust this value to position it horizontally */
-  z-index: 10; 
-  width: 10px;
-  align-items: center;
-  
-}
+
 
 body {
         margin: 0;
@@ -1419,96 +1328,6 @@ body {
     
 
 
-/* Green Button for Connect */
-#connectBtn {
-    background-color: #4CAF50; /* Green */
-    color: white;
-    border-radius: 5px;
-  
-    top: 40px;
-    right:-10px;
-    
-  }
-
-
-#connectBtn:hover {
-    background-color: #45a049; /* Darker Green on Hover */
-}
-
-/* Red Button for Disconnect */
-#disconnectBtn {
-    background-color: #F44336; /* Red */
-    color: white;
-    border-radius: 5px; 
-    top:40px;
-    left: 970px;
-}
-
-#disconnectBtn:hover {
-    background-color: #d32f2f; /* Darker Red on Hover */
-    align-items: center;
-}
-
-
-
-/* Click Effect - Increase Size */
-button:active {
-    transform: scale(1.1); /* Increase size by 10% */
-}
-.led-button {
-position: relative;
-padding: 15px 30px;
-font-size: 16px;
-font-weight: bold;
-color: white;
-text-transform: uppercase;
-border: none;
-border-radius: 50px;
-background-color: #444;
-cursor: pointer;
-transition: all 0.3s ease;
-outline: none;
-box-shadow: 
-0 0 10px rgba(0, 0, 0, 0.3),
-0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-
-
-.led-button.green {
-background-color: #4CAF50;
-box-shadow: 
-0 0 15px #4CAF50,
-0 0 30px #4CAF50;
-}
-.led-button.red {
-background-color: #F44336;
-box-shadow: 
-0 0 15px #F44336,
-0 0 30px #F44336;
-} 
-
-.led-button.blue {
-background-color: #000000;
-box-shadow: 
-0 0 15px #080808,
-0 0 30px #080808;
-
-}
-
-.led-button:hover {
-box-shadow: 
-0 0 25px rgba(255, 255, 255, 0.8),
-0 0 50px rgba(255, 255, 255, 0.8);
-transform: scale(1.1);
-}
-
-.led-button:active {
-box-shadow: 
-0 0 10px rgba(255, 255, 255, 0.5),
-0 0 20px rgba(255, 255, 255, 0.5);
-transform: scale(0.95);
-}
 
 
 #nameDisplay {
@@ -1635,3 +1454,78 @@ z-index: 10;
   background: rgba(0, 0, 0, 0.4);
   z-index: -1;
 }
+
+
+
+
+
+
+
+
+#chat-container {
+  position: absolute;
+  top: 10%;
+  right: 2%; /* Moved further right */
+  width: 300px; /* Increased width slightly */
+  max-height: 400px; /* Limit chat window height */
+  overflow-y: hidden; /* Hide overflow initially */
+  padding: 15px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+#chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Hide scrollbar visually but allow scrolling */
+#chat-box::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Chat message styling */
+.chat-message {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  animation: slide-in-right 0.5s ease-in-out;
+  word-wrap: break-word; 
+  transition: all 0.5s ease;
+}
+
+/* Slide up animation for old messages */
+@keyframes slide-in-right {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out-up {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* Loading animation with increased size */
+#ps5-loader {
+  display: none;
+  justify-content: center;
+  margin-top: 15px; /* Prevent cutting off */
+}
+
+.ps5-icon {
+  height: 25px; /* Increased icon size */
+  margin: 4px;
+  animation: loading-animation 1.5s infinite;
+}
+
+@keyframes loading-animation {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
