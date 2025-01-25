@@ -1454,3 +1454,78 @@ z-index: 10;
   background: rgba(0, 0, 0, 0.4);
   z-index: -1;
 }
+
+
+
+
+
+
+
+
+#chat-container {
+  position: absolute;
+  top: 10%;
+  right: 2%; /* Moved further right */
+  width: 300px; /* Increased width slightly */
+  max-height: 400px; /* Limit chat window height */
+  overflow-y: hidden; /* Hide overflow initially */
+  padding: 15px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+#chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Hide scrollbar visually but allow scrolling */
+#chat-box::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Chat message styling */
+.chat-message {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  animation: slide-in-right 0.5s ease-in-out;
+  word-wrap: break-word; 
+  transition: all 0.5s ease;
+}
+
+/* Slide up animation for old messages */
+@keyframes slide-in-right {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out-up {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* Loading animation with increased size */
+#ps5-loader {
+  display: none;
+  justify-content: center;
+  margin-top: 15px; /* Prevent cutting off */
+}
+
+.ps5-icon {
+  height: 25px; /* Increased icon size */
+  margin: 4px;
+  animation: loading-animation 1.5s infinite;
+}
+
+@keyframes loading-animation {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+

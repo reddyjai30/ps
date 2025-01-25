@@ -9,7 +9,7 @@ const ps5_ui = document.getElementById("ps5_ui");
 
 // Create a video element for the boot-up video
 const bootVideo = document.createElement("video");
-bootVideo.src = "C:/Users/7000039265/Desktop/front final/ps/Ps-Boot.mp4"; // Replace with the actual video path
+bootVideo.src = "Ps-Boot.mp4"; // Replace with the actual video path
 bootVideo.style.position = "fixed";
 bootVideo.style.top = "0";
 bootVideo.style.left = "0";
@@ -47,71 +47,6 @@ setTimeout(() => {
   playstation.style.pointerEvents = "auto";
 }, 3000);
 
-// $("#playstation").click(function () {
-//   $(".intro_info").addClass("intro_info_hide_anim");
-//   $(".controller_container").addClass("controller_container_hide_anim");
-
-//   setTimeout(() => {
-//     $(".intro_info").removeClass("intro_info_hide_anim");
-//     $(".controller_container").removeClass("controller_container_hide_anim");
-//     intro_info.style.visibility = "hidden";
-//     controller_container.style.visibility = "hidden";
-
-//     ps5_intro.style.display = "none";
-//     ps5_intro.style.visibility = "hidden";
-//     ps5_intro.style.width = "0";
-//     ps5_intro.style.height = "0";
-//     ps5_ui.style.display = "flex";
-
-//     $(".games_list").addClass("games_list_anim");
-//     $("#game_bg").addClass("game_bg_anim");
-//     $(".white_rect").addClass("white_rect_anim");
-//     $("#game_play_time").addClass("game_play_time_anim");
-//     $("#game_name").addClass("game_name_anim");
-//     $(".game_start_button").addClass("game_start_button_anim");
-//     $("#last_checkpoint_img").addClass("last_checkpoint_img_anim");
-//     $("#last_checkpoint_text").addClass("last_checkpoint_text_anim");
-//     $("#last_checkpoint_name").addClass("last_checkpoint_name_anim");
-//     $("#last_checkpoint_time").addClass("last_checkpoint_time_anim");
-//     // $("#last_trophy_img").addClass("last_trophy_img_anim");
-//     // $("#last_trophy_text").addClass("last_trophy_text_anim");
-//     // $("#last_trophy_name").addClass("last_trophy_name_anim");
-//     // $("#last_trophy_time").addClass("last_trophy_time_anim");
-//     // $("#top_trophy_img").addClass("top_trophy_img_anim");
-//     // $("#top_trophy_text").addClass("top_trophy_text_anim");
-//     // $("#top_trophy_name").addClass("top_trophy_name_anim");
-//     // $("#top_trophy_time").addClass("top_trophy_time_anim");
-//     // $("#all_trophies_img").addClass("all_trophies_img_anim");
-//     // $("#all_trophies_text").addClass("all_trophies_text_anim");
-//     // $("#all_trophies_numbers").addClass("all_trophies_numbers_anim");
-//     $(".notification_text").addClass("notification_text_anim");
-
-//     setTimeout(() => {
-//       $(".games_list").removeClass("games_list_anim");
-//       $("#game_bg").removeClass("game_bg_anim");
-//       $(".white_rect").removeClass("white_rect_anim");
-//       $("#game_play_time").removeClass("game_play_time_anim");
-//       $("#game_name").removeClass("game_name_anim");
-//       $(".game_start_button").removeClass("game_start_button_anim");
-//       $("#last_checkpoint_img").removeClass("last_checkpoint_img_anim");
-//       $("#last_checkpoint_text").removeClass("last_checkpoint_text_anim");
-//       $("#last_checkpoint_name").removeClass("last_checkpoint_name_anim");
-//       $("#last_checkpoint_time").removeClass("last_checkpoint_time_anim");
-//       // $("#last_trophy_img").removeClass("last_trophy_img_anim");
-//       // $("#last_trophy_text").removeClass("last_trophy_text_anim");
-//       // $("#last_trophy_name").removeClass("last_trophy_name_anim");
-//       // $("#last_trophy_time").removeClass("last_trophy_time_anim");
-//       // $("#top_trophy_img").removeClass("top_trophy_img_anim");
-//       // $("#top_trophy_text").removeClass("top_trophy_text_anim");
-//       // $("#top_trophy_name").removeClass("top_trophy_name_anim");
-//       // $("#top_trophy_time").removeClass("top_trophy_time_anim");
-//       // $("#all_trophies_img").removeClass("all_trophies_img_anim");
-//       // $("#all_trophies_text").removeClass("all_trophies_text_anim");
-//       // $("#all_trophies_numbers").removeClass("all_trophies_numbers_anim");
-//       $(".notification_text").removeClass("notification_text_anim");
-//     }, 600);
-//   }, 1000);
-// });
 
 $("#playstation").click(function () {
   // Show the boot-up video
@@ -503,264 +438,6 @@ FontAwesome.library.add(
       "Sekiro: Shadows Die Twice"
     ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//     const playstation = document.getElementById("playstation");
-//     const disconnectBtn = document.getElementById("disconnectBtn");
-//     const startBtn = document.getElementById("startBtn");
-//     const stopBtn = document.getElementById("stopBtn");
-//     const micIcon = document.getElementById("micIcon");
-//     const stopMicIcon = document.getElementById("stopMicIcon");
-//     const responsesList = document.getElementById("responsesList");
-//     const audioPlayback = document.getElementById("audioPlayback");
-
-//     let socket;
-//     let mediaRecorder;
-//     let audioChunks = [];
-//     let sessionId;
-
-//     async function convertToLinear16(blob) {
-//         const audioContext = new AudioContext({ sampleRate: 48000 });
-//         const arrayBuffer = await blob.arrayBuffer();
-//         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-
-//         const offlineContext = new OfflineAudioContext(
-//             audioBuffer.numberOfChannels,
-//             audioBuffer.duration * 48000,
-//             48000
-//         );
-
-//         const bufferSource = offlineContext.createBufferSource();
-//         bufferSource.buffer = audioBuffer;
-//         bufferSource.connect(offlineContext.destination);
-//         bufferSource.start(0);
-
-//         const renderedBuffer = await offlineContext.startRendering();
-//         const linear16Data = interleave(renderedBuffer);
-
-//         return linear16Data;
-//     }
-
-//     function interleave(buffer) {
-//         const channels = buffer.numberOfChannels;
-//         const samples = buffer.length * channels;
-//         const output = new Int16Array(samples);
-
-//         let index = 0;
-//         for (let i = 0; i < buffer.length; i++) {
-//             for (let j = 0; j < channels; j++) {
-//                 let sample = buffer.getChannelData(j)[i];
-//                 sample = Math.max(-1, Math.min(1, sample));
-//                 output[index++] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
-//             }
-//         }
-//         return output;
-//     }
-
-
-//     startBtn.style.display = "none";
-//     stopBtn.style.display = "none";
-    
-// // // Connect Button Logic
-// // playstation.addEventListener("click", () => {
-// //     sessionId = `session-${Date.now()}`;
-// //     socket = new WebSocket("ws://localhost:8080/ws/voice");
-   
-// //     socket.onopen = () => {
-// //         console.log("WebSocket connection established.");
-// //         playstation.disabled = true;
-// //         disconnectBtn.disabled = false;
-
-// //         // Show mic buttons
-// //         startBtn.style.display = "inline-block";
-// //         stopBtn.style.display = "inline-block";
-// //     };
-
-// //     socket.onerror = (error) => {
-// //         console.error("WebSocket error:", error);
-// //     };
-// // });
-
-// // Disconnect Button Logic
-// disconnectBtn.addEventListener("click", () => {
-//     if (socket && socket.readyState === WebSocket.OPEN) {
-//         socket.close();
-//         console.log("Session ended.");
-//     }
-
-//     playstation.disabled = false;
-//     disconnectBtn.disabled = true;
-
-//     // Hide mic buttons
-//     startBtn.style.display = "none";
-//     stopBtn.style.display = "none";
-//     // li.style.display="none";
-// });
-
-// playstation.addEventListener("click", () => {
-//         sessionId = `session-${Date.now()}`;
-//         socket = new WebSocket("ws://localhost:8080/ws/voice");
-
-//         socket.onopen = () => {
-//             console.log("WebSocket connection established.");
-//             playstation.disabled = true;
-//             disconnectBtn.disabled = false;
-//             startBtn.disabled = false;
-//             startBtn.style.display = "inline-block";
-//             stopBtn.style.display = "inline-block";
-//     };
-
-//     socket.onerror = (error) => {
-//         console.error("WebSocket error:", error);
-//     };
-
-//         socket.onmessage = (event) => {
-//             const serverMessage = JSON.parse(event.data);
-//             if (serverMessage.response) {
-//                 console.log("Server response:", serverMessage.response);
-//                 responsesList.innerHTML = "";
-//                 const li = document.createElement("li");
-//                 li.textContent = serverMessage.response;
-//                 responsesList.appendChild(li);
-
-
-//                 if (serverMessage.response.toLowerCase().includes("opening")) { 
-//                 // Extract the name after 'opening' in the response
-//                 const match = serverMessage.response.toLowerCase().match(/opening\s+(.+)/);
-
-//                 // const match = serverMessage.response.toLowerCase().match(/opening (.+)/);
-//                 console.log(match)
-
-//                 if (match) {
-//                         const name = match[1]||match[1][1]; // Capture the name (e.g., "gopi")
-//                         console.log(name)
-//                         window.open(`search.html?name=${name}`,"_blank");
-//                  }
-// }
-
-//             }
-//         };
-
-//         socket.onerror = (error) => {
-//             console.error("WebSocket error:", error);
-//         };
-
-//         socket.onclose = () => {
-//             console.log("WebSocket connection closed.");
-//             playstation.disabled = false;
-//             disconnectBtn.disabled = true;
-//             startBtn.disabled = true;
-//             stopBtn.disabled = true;
-//         };
-//     });
-
-//     disconnectBtn.addEventListener("click", () => {
-//         if (socket && socket.readyState === WebSocket.OPEN) {
-//             socket.close();
-//             console.log("Session ended.");
-//         }
-//     });
-
-    // startBtn.addEventListener("click", async () => {
-    //     try {
-    //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    //         mediaRecorder = new MediaRecorder(stream);
-
-    //         mediaRecorder.ondataavailable = (event) => {
-    //             audioChunks.push(event.data);
-    //         };
-
-    //         mediaRecorder.start();
-    //         console.log("Recording started.");
-    //         startBtn.disabled = true;
-    //         stopBtn.disabled = false;
-    //         micIcon.classList.add("pulse");
-    //     } catch (error) {
-    //         console.error("Error starting recording:", error);
-    //     }
-    // });
-
-    // stopBtn.addEventListener("click", async () => {
-    //     if (mediaRecorder.state !== "recording") return;
-
-    //     mediaRecorder.stop();
-    //     console.log("Recording stopped, preparing audio...");
-
-    //     mediaRecorder.onstop = async () => {
-    //         const blob = new Blob(audioChunks, { type: "audio/wav" });
-    //         const linear16Data = await convertToLinear16(blob);
-    //         const audioBlob = new Blob([linear16Data], { type: "audio/l16" });
-    //         const audioURL = URL.createObjectURL(blob);
-
-
-    //         if (audioPlayback.src) {
-    //         audioPlayback.pause(); // Stop any ongoing playback
-    //         audioPlayback.src = ""; // Clear the previous source
-    //           }
-    //         audioPlayback.src = audioURL;
-    //         audioPlayback.style.display = "block";
-    //         // audioPlayback.play();
-
-    //         const arrayBuffer = await audioBlob.arrayBuffer();
-    //         const message = {
-    //             sessionId: sessionId,
-    //             rawData: Array.from(new Uint8Array(arrayBuffer)),
-    //             isFinal: true,
-    //         };
-
-    //         if (socket.readyState === WebSocket.OPEN) {
-    //             socket.send(JSON.stringify(message));
-    //             console.log("Raw audio data sent to server:", message);
-    //         } else {
-    //             console.warn("WebSocket is not open. Unable to send audio.");
-    //         }
-
-    //         audioChunks = [];
-    //         startBtn.disabled = false;
-    //         stopBtn.disabled = true;
-    //         micIcon.classList.remove("pulse");
-    //         stopMicIcon.classList.add("bounce");
-    //         setTimeout(() => stopMicIcon.classList.remove("bounce"), 300);
-    //     };
-    // });
-
-    
-
     function updateContent() {
       var i = flkty.selectedIndex;
       document.getElementById("game_bg").style.backgroundImage =
@@ -801,25 +478,11 @@ function showControls() {
 
 
 
-// Toggle listening mode when PS button is clicked
-// document.getElementById("psButton").addEventListener("click", () => {
-//   isListening = !isListening;
-//   const ledIndicator = document.getElementById("ledIndicator");
-
-//   if (isListening) {
-//       ledIndicator.classList.add("green");
-//       ledIndicator.setAttribute("title", "Listening...");
-//   } else {
-//       ledIndicator.classList.remove("green");
-//       ledIndicator.setAttribute("title", "Stopped Listening");
-//   }
-// });
-
-
 let isListening = false;
 let mediaRecorder;
 let audioChunks = [];
 let socket;
+let isFirstGreeting = true;
 
 // Retrieve session ID from localStorage, or generate a new one if it doesn't exist
 let sessionId = localStorage.getItem("sessionId") || `session-${Date.now()}`;
@@ -830,11 +493,16 @@ function initializeWebSocket() {
     socket = new WebSocket("ws://localhost:8080/ws/voice");
 
     socket.onopen = () => {
-        // console.log("WebSocket connection established.");
+        console.log("WebSocket connection established.");
     };
 
     socket.onmessage = (event) => {
         console.log("Message received from server:", event.data);
+        const response = JSON.parse(event.data).response;
+
+        hideLoader();
+        handleGreetingResponse(response);
+        handleTTSResponse(response);
     };
 
     socket.onerror = (error) => {
@@ -844,6 +512,94 @@ function initializeWebSocket() {
     socket.onclose = () => {
         console.log("WebSocket connection closed.");
     };
+}
+
+// Function to determine greeting based on the time of day
+function getGreetingMessage() {
+    const hours = new Date().getHours();
+    if (hours < 12) {
+        return "Good morning! ";
+    } else if (hours < 18) {
+        return "Good afternoon! ";
+    } else {
+        return "Good evening! ";
+    }
+}
+
+// Handle greeting response with time-based message
+function handleGreetingResponse(response) {
+    const greetingKeywords = ["hey playstation", "hello", "hi", "holla"];
+    let lowerCaseResponse = response.toLowerCase();
+
+    if (isFirstGreeting && greetingKeywords.some(keyword => lowerCaseResponse.includes(keyword))) {
+        const greetingMessage = getGreetingMessage() + response;
+        addChatMessage(greetingMessage);
+        isFirstGreeting = false; // Ensure greeting is displayed only once
+    } else {
+        addChatMessage(response);
+    }
+}
+
+// Function to check and trigger TTS if response contains a game opening phrase
+function handleTTSResponse(response) {
+    const regex = /great choice opening (.+)/i;
+    const match = response.match(regex);
+
+    if (match) {
+        const ttsMessage = `Here are the list of recommended games, please choose any`;
+        speakText(ttsMessage);
+    }
+}
+
+// Function to speak the provided text
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US"; // Set language
+        speech.rate = 1;       // Adjust speed if needed
+        speech.pitch = 1;      // Adjust pitch if needed
+        speech.volume = 1;     // Adjust volume if needed
+
+        window.speechSynthesis.speak(speech);
+        console.log("Speaking:", text);
+    } else {
+        console.error("Speech synthesis not supported in this browser.");
+    }
+}
+
+// Function to add chat messages to the UI
+const chatBox = document.getElementById("chat-box");
+const loader = document.getElementById("ps5-loader");
+
+function addChatMessage(message) {
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("chat-message");
+    messageElement.innerText = message;
+    chatBox.appendChild(messageElement);
+
+    // Check if there are more than 4 messages
+    if (chatBox.children.length > 3) {
+        let firstMessage = chatBox.children[0];
+        firstMessage.style.animation = "slide-out-up 0.5s forwards";
+
+        // Remove after animation
+        setTimeout(() => {
+            chatBox.removeChild(firstMessage);
+        }, 500);
+    }
+
+    // Scroll to the bottom after adding a new message
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Show loading animation when recording stops
+function showLoader() {
+    loader.style.display = "flex";
+}
+
+// Hide loading animation when response is received
+function hideLoader() {
+    loader.style.display = "none";
 }
 
 // Audio Conversion to Linear16
@@ -887,7 +643,6 @@ function interleave(buffer) {
 const playstationButton = document.getElementById("playstation"); // PlayStation button
 const psButton = document.getElementById("psButton"); // PS Button
 const ledIndicator = document.getElementById("ledIndicator"); // LED indicator
-const audioPlayback = document.getElementById("audioPlayback"); // Audio playback element
 
 // PlayStation Button to initialize WebSocket
 playstationButton.addEventListener("click", () => {
@@ -908,7 +663,6 @@ psButton.addEventListener("click", async () => {
         ledIndicator.setAttribute("title", "Listening...");
 
         try {
-            // Start recording
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
@@ -918,8 +672,7 @@ psButton.addEventListener("click", async () => {
             };
 
             mediaRecorder.start();
-            console.log("session Id:",sessionId);
-             
+            console.log("session Id:", sessionId);
             console.log("Recording started.");
         } catch (error) {
             console.error("Error starting recording:", error);
@@ -931,6 +684,7 @@ psButton.addEventListener("click", async () => {
         // Stop Recording and send audio
         if (mediaRecorder && mediaRecorder.state === "recording") {
             mediaRecorder.stop();
+            showLoader(); // Show loading after stopping recording
             console.log("Recording stopped, preparing audio...");
 
             mediaRecorder.onstop = async () => {
@@ -938,25 +692,13 @@ psButton.addEventListener("click", async () => {
                 const linear16Data = await convertToLinear16(blob);
                 const audioBlob = new Blob([linear16Data], { type: "audio/l16" });
 
-                const audioURL = URL.createObjectURL(blob);
-
-                // Play the audio locally
-                // if (audioPlayback.src) {
-                //     audioPlayback.pause();
-                //     audioPlayback.src = "";
-                // }
-                // audioPlayback.src = audioURL;
-                // audioPlayback.style.display = "block";
-
-                // Convert Blob to ArrayBuffer and prepare the message
                 const arrayBuffer = await audioBlob.arrayBuffer();
                 const message = {
-                    sessionId: sessionId, // Use the same session ID from localStorage
+                    sessionId: sessionId,
                     rawData: Array.from(new Uint8Array(arrayBuffer)),
                     isFinal: true
                 };
 
-                // Send to WebSocket server
                 if (socket.readyState === WebSocket.OPEN) {
                     socket.send(JSON.stringify(message));
                     console.log("Raw audio data sent to server:", message);
@@ -964,7 +706,7 @@ psButton.addEventListener("click", async () => {
                     console.warn("WebSocket is not open. Unable to send audio.");
                 }
 
-                audioChunks = []; // Clear the audio chunks
+                audioChunks = [];
                 ledIndicator.classList.remove("green");
                 ledIndicator.setAttribute("title", "Stopped Listening");
             };
