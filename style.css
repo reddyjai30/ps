@@ -1529,3 +1529,49 @@ z-index: 10;
   100% { transform: scale(0.8); opacity: 0.5; }
 }
 
+
+
+/* Game Popup Styling */
+.game-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 50%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.popup-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.controller-image {
+  width: 100px;
+  margin-top: 20px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #ff0000;
+}

@@ -478,15 +478,35 @@ function showControls() {
 
 
 
+
 let isListening = false;
 let mediaRecorder;
 let audioChunks = [];
 let socket;
 let isFirstGreeting = true;
+let micStream = null;  // Store microphone stream globally
 
 // Retrieve session ID from localStorage, or generate a new one if it doesn't exist
 let sessionId = localStorage.getItem("sessionId") || `session-${Date.now()}`;
 localStorage.setItem("sessionId", sessionId); // Store the session ID to persist it until page refresh
+
+// Request microphone access once and store the stream for reuse
+async function requestMicrophoneAccess() {
+    try {
+        if (!micStream) {
+            micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            console.log("Microphone access granted.");
+        }
+    } catch (error) {
+        console.error("Microphone access denied:", error);
+        alert("Please allow microphone access to use voice features.");
+    }
+}
+
+// Call this function once when the page loads
+window.onload = async () => {
+    await requestMicrophoneAccess();
+};
 
 // WebSocket Initialization
 function initializeWebSocket() {
@@ -500,35 +520,24 @@ function initializeWebSocket() {
         console.log("Message received from server:", event.data);
         const response = JSON.parse(event.data).response;
 
+        if (isFirstGreeting) {
+            const greetingMessage = getGreetingMessage();
+            addChatMessage(greetingMessage + response);
+            isFirstGreeting = false;
+        } else {
+            addChatMessage(response);
+        }
 
-
-
-
-
-
-
-
-        if (response.toLowerCase().includes("opening")) { 
-          // Extract the name after 'opening' in the response
+        if (response.toLowerCase().includes("opening")) {
           const match = response.toLowerCase().match(/opening\s+(.+)/);
-
-          // const match = serverMessage.response.toLowerCase().match(/opening (.+)/);
-          console.log(match)
-
           if (match) {
-                  const name = match[1]||match[1][1]; // Capture the name (e.g., "gopi")
-                  console.log(name)
-                  window.open(`search.html?name=${name}`,"_blank");
-           }
-}
-
-
-
-
-
+              const name = match[1] || match[1][1];
+              console.log(name);
+              showGamePopup(name);  // Show the popup within the same page
+          }
+      }
 
         hideLoader();
-        handleGreetingResponse(response);
         handleTTSResponse(response);
     };
 
@@ -545,31 +554,17 @@ function initializeWebSocket() {
 function getGreetingMessage() {
     const hours = new Date().getHours();
     if (hours < 12) {
-        return "Good morning! ";
+        return "Good morning! 😊❤️🌞 ";
     } else if (hours < 18) {
-        return "Good afternoon! ";
+        return "Good afternoon! 🌇 ";
     } else {
-        return "Good evening! ";
-    }
-}
-
-// Handle greeting response with time-based message
-function handleGreetingResponse(response) {
-    const greetingKeywords = ["hey playstation", "hello", "hi", "holla"];
-    let lowerCaseResponse = response.toLowerCase();
-
-    if (isFirstGreeting && greetingKeywords.some(keyword => lowerCaseResponse.includes(keyword))) {
-        const greetingMessage = getGreetingMessage() + response;
-        addChatMessage(greetingMessage);
-        isFirstGreeting = false; // Ensure greeting is displayed only once
-    } else {
-        addChatMessage(response);
+        return "Good evening! 🌓🌃 ";
     }
 }
 
 // Function to check and trigger TTS if response contains a game opening phrase
 function handleTTSResponse(response) {
-    const regex = /great choice opening (.+)/i;
+    const regex = /(great choice opening|opening)\s(.+)/i;
     const match = response.match(regex);
 
     if (match) {
@@ -582,10 +577,10 @@ function handleTTSResponse(response) {
 function speakText(text) {
     if ('speechSynthesis' in window) {
         const speech = new SpeechSynthesisUtterance(text);
-        speech.lang = "en-US"; // Set language
-        speech.rate = 1;       // Adjust speed if needed
-        speech.pitch = 1;      // Adjust pitch if needed
-        speech.volume = 1;     // Adjust volume if needed
+        speech.lang = "en-US";
+        speech.rate = 1;
+        speech.pitch = 1;
+        speech.volume = 1;
 
         window.speechSynthesis.speak(speech);
         console.log("Speaking:", text);
@@ -604,18 +599,14 @@ function addChatMessage(message) {
     messageElement.innerText = message;
     chatBox.appendChild(messageElement);
 
-    // Check if there are more than 4 messages
     if (chatBox.children.length > 3) {
         let firstMessage = chatBox.children[0];
         firstMessage.style.animation = "slide-out-up 0.5s forwards";
-
-        // Remove after animation
         setTimeout(() => {
             chatBox.removeChild(firstMessage);
         }, 500);
     }
 
-    // Scroll to the bottom after adding a new message
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
@@ -667,16 +658,15 @@ function interleave(buffer) {
 }
 
 // Initialize WebSocket
-const playstationButton = document.getElementById("playstation"); // PlayStation button
-const psButton = document.getElementById("psButton"); // PS Button
-const ledIndicator = document.getElementById("ledIndicator"); // LED indicator
+const playstationButton = document.getElementById("playstation");
+const psButton = document.getElementById("psButton");
+const ledIndicator = document.getElementById("ledIndicator");
 
 // PlayStation Button to initialize WebSocket
 playstationButton.addEventListener("click", () => {
-    initializeWebSocket();  // Establish WebSocket connection
-
-    playstationButton.disabled = true; // Disable the PlayStation button after click
-    psButton.disabled = false; // Enable PS Button
+    initializeWebSocket();
+    playstationButton.disabled = true;
+    psButton.disabled = false;
     console.log("WebSocket connection established.");
 });
 
@@ -685,13 +675,16 @@ psButton.addEventListener("click", async () => {
     isListening = !isListening;
 
     if (isListening) {
-        // Start Recording
-        ledIndicator.classList.add("green");
-        ledIndicator.setAttribute("title", "Listening...");
-
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
+            // Reuse the granted microphone stream
+            if (!micStream) {
+                await requestMicrophoneAccess();
+            }
+
+            ledIndicator.classList.add("green");
+            ledIndicator.setAttribute("title", "Listening...");
+
+            mediaRecorder = new MediaRecorder(micStream);
             audioChunks = [];
 
             mediaRecorder.ondataavailable = (event) => {
@@ -708,10 +701,9 @@ psButton.addEventListener("click", async () => {
             ledIndicator.setAttribute("title", "Error: Could not start recording.");
         }
     } else {
-        // Stop Recording and send audio
         if (mediaRecorder && mediaRecorder.state === "recording") {
             mediaRecorder.stop();
-            showLoader(); // Show loading after stopping recording
+            showLoader();
             console.log("Recording stopped, preparing audio...");
 
             mediaRecorder.onstop = async () => {
@@ -740,3 +732,89 @@ psButton.addEventListener("click", async () => {
         }
     }
 });
+
+// Function to show the game popup
+function showGamePopup(name) {
+  document.getElementById("gameNamePopup").innerText = name;
+  document.getElementById("game-popup").style.display = "flex";
+
+  // API call to fetch game data
+  const endpoint = `https://search.e1-np.api.playstation.com/v1/universalSearch?searchTerm=${name}&countryCode=US&languageCode=en&age=99&pageSize=8`;
+
+  fetch(endpoint)
+      .then(response => response.json())
+      .then(data => {
+          const results = data?.domainResponses?.[0]?.results || [];
+          const popupContent = document.getElementById("popup-content");
+          popupContent.innerHTML = '';
+
+          if (results.length === 0) {
+              popupContent.innerHTML = '<p>No results available.</p>';
+              return;
+          }
+
+          results.slice(0, 4).forEach(result => {
+              const name = result?.conceptProductMetadata?.name || 'Unknown';
+              const imageUrl = result?.conceptProductMetadata?.media?.images?.[0]?.url;
+              const videoUrl = result?.conceptProductMetadata?.media?.videos?.[0]?.url || '';
+
+              const gameCard = document.createElement("div");
+              gameCard.classList.add("game-card");
+
+              if (videoUrl) {
+                  gameCard.innerHTML = `
+                      <img src="${imageUrl}" alt="${name}" class="clickable-image" style="cursor: pointer;">
+                      <h3>${name}</h3>
+                  `;
+                  gameCard.querySelector('.clickable-image').addEventListener('click', () => {
+                      playVideoInFullscreen(videoUrl, gameCard, name);
+                  });
+              } else {
+                  gameCard.innerHTML = `
+                      <img src="${imageUrl}" alt="${name}">
+                      <h3>${name}</h3>
+                  `;
+              }
+              popupContent.appendChild(gameCard);
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching game data:', error);
+          document.getElementById("popup-content").innerHTML = '<p style="color: red;">Failed to load games.</p>';
+      });
+}
+
+// Function to close the popup
+function closeGamePopup() {
+  document.getElementById("game-popup").style.display = "none";
+}
+
+// Function to handle voice command responses
+function handleVoiceCommand(response) {
+  const match = response.toLowerCase().match(/open\s+(.+)/);
+  if (match) {
+      const gameName = match[1].trim();
+      showGamePopup(gameName);
+      speakText(`Great choice, opening ${gameName}`);
+  }
+}
+
+// Listening for WebSocket messages
+socket.onmessage = (event) => {
+  console.log("Message received from server:", event.data);
+  const response = JSON.parse(event.data).response;
+  handleVoiceCommand(response);
+};
+
+// Function to play video in fullscreen
+function playVideoInFullscreen(videoUrl, gameCard, gameName) {
+  const videoElement = document.createElement("video");
+  videoElement.src = videoUrl;
+  videoElement.controls = true;
+  videoElement.autoplay = true;
+  videoElement.style.width = "100%";
+  videoElement.style.borderRadius = "10px";
+
+  gameCard.innerHTML = `<h3>${gameName}</h3>`;
+  gameCard.appendChild(videoElement);
+}
