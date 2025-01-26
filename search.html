@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Name and Image</title>
+    <style>
+        /* Reset and Body */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background: #f4f4f4;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        header select {
+            background: rgba(255, 255, 255, 0.8);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        /* Content */
+        #content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 images per row */
+            gap: 20px; /* Space between images */
+            max-width: 1200px;
+            margin: 90px auto; /* Leave space for the header */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Image Container */
+        .image-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            height: 300px; /* Fixed height for all image boxes */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-container h3 {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        /* Animation for Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+            animation: morphBackground 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes morphBackground {
+            0% {
+                clip-path: circle(70% at 50% 50%);
+            }
+            100% {
+                clip-path: circle(10% at 50% 50%);
+            }
+            
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Results for <span id="namePlaceholder">Spiderman</span></h1>
+    <select id="resultCount">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select>
+</header>
+
+<div id="content"></div>
+
+<script>
+    // Function to get the "name" parameter from the URL
+    function getURLParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    const resultCountSelect = document.getElementById("resultCount");
+    const contentContainer = document.getElementById("content");
+
+    // Get the name from the URL and update the endpoint
+    const name = getURLParameter("name") || "default";
+    console.log(name)
+    const endpoint = `https://search.e1-np.api.playstation.com/v1/universalSearch?searchTerm=${name}&countryCode=US&languageCode=en&age=99&suggestionSize=10&pageSize=8&boostIsEntitledToFactor=MODERATE&boostMutualFriendsCountFactor=MODERATE&boostTitleIdsFactor=MODERATE&boostTitleIds=&searchDomains=ConceptGameWeb&blendedContext=&socialStrictGrouping=&preferredMediaPartnerTitleIds=&preferredMediaPartnerName=&preferredMediaContentType=&preferredGameService=&isOpenIntent=true&searchContext=Unknown&explain=&isChildRestricted=&strandSize=&strandOffset=&facets=&discountBrands=`; // Replace with your GET endpoint URL
+    
+    // Update the header with the name
+    document.getElementById("namePlaceholder").textContent = name;
+
+    async function fetchAndDisplayNameAndImage() {
+    try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const results = data?.domainResponses?.[0]?.results || [];
+
+        contentContainer.innerHTML = ''; // Clear previous content
+
+        if (results.length === 0) {
+            contentContainer.innerHTML = '<p>No results available.</p>';
+            return;
+        }
+
+        // Filter results to exclude those without an image URL
+        const filteredResults = results.filter(
+            (result) => result?.conceptProductMetadata?.media?.images?.[0]?.url
+        );
+
+        // Sort results: videos first, then others
+        const sortedResults = filteredResults.sort((a, b) => {
+            const aHasVideo = a?.conceptProductMetadata?.media?.videos?.[0]?.url ? 1 : 0;
+            const bHasVideo = b?.conceptProductMetadata?.media?.videos?.[0]?.url ? 1 : 0;
+            return bHasVideo - aHasVideo;
+        });
+
+        if (sortedResults.length === 0) {
+            contentContainer.innerHTML = '<p>No results available with valid images.</p>';
+            return;
+        }
+
+        // Render sorted results
+        sortedResults.forEach((result) => {
+            const name = result?.conceptProductMetadata?.name || 'No Name Available';
+            const imageUrl = result?.conceptProductMetadata?.media?.images?.[0]?.url;
+            const videoUrl = result?.conceptProductMetadata?.media?.videos?.[0]?.url || '';
+
+            const container = document.createElement('div');
+            container.classList.add('image-container');
+
+            if (videoUrl) {
+                // Display video results
+                container.innerHTML = `
+                    <h3>${name}</h3>
+                    <img src="${imageUrl}" alt="${name}" class="clickable-image" style="cursor: pointer;">
+                `;
+                container.querySelector('.clickable-image').addEventListener('click', () => {
+                    playVideoInFullscreen(videoUrl, container, name);
+                });
+            } else {
+                // Display results with no video
+                container.innerHTML = `
+                    <h3>${name}</h3>
+                    <img src="${imageUrl}" alt="${name}">
+                `;
+            }
+
+            contentContainer.appendChild(container);
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        contentContainer.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+    }
+}
+
+// Function to play video in fullscreen
+function playVideoInFullscreen(videoUrl, container, name) {
+    // Create a temporary video element
+    const videoElement = document.createElement('video');
+    videoElement.setAttribute('controls', '');
+    videoElement.setAttribute('autoplay', '');
+    videoElement.setAttribute('style', 'width: 100%; height: 100%;');
+    videoElement.innerHTML = `
+        <source src="${videoUrl}" type="video/mp4">
+        Your browser does not support the video tag.
+    `;
+
+    // Add the video element to the container temporarily
+    container.innerHTML = `
+        <h3>${name}</h3>
+    `;
+    container.appendChild(videoElement);
+
+    // Request fullscreen for the video element
+    if (videoElement.requestFullscreen) {
+        videoElement.requestFullscreen();
+    } else if (videoElement.webkitRequestFullscreen) {
+        videoElement.webkitRequestFullscreen(); // Safari
+    } else if (videoElement.msRequestFullscreen) {
+        videoElement.msRequestFullscreen(); // IE/Edge
+    }
+
+    // Listen for when the video ends
+    videoElement.addEventListener('ended', () => {
+        // Exit fullscreen if still in fullscreen mode
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+
+        // Replace the video element with the original layout
+        container.innerHTML = `
+            <h3>${name}</h3>
+            <img src="${videoUrl.replace('.mp4', '.png')}" alt="${name}" class="clickable-image" style="cursor: pointer;">
+        `;
+        container.querySelector('.clickable-image').addEventListener('click', () => {
+            playVideoInFullscreen(videoUrl, container, name);
+        });
+    });
+}
+
+resultCountSelect.addEventListener('change', fetchAndDisplayNameAndImage);
+window.addEventListener('load', fetchAndDisplayNameAndImage);
+
+</script>
+
+</body>
+</html>
+
