@@ -733,7 +733,7 @@ psButton.addEventListener("click", async () => {
     }
 });
 
-// Function to show the game popup
+// Function to show the game popup overlay
 function showGamePopup(name) {
   document.getElementById("gameNamePopup").innerText = name;
   document.getElementById("game-popup").style.display = "flex";
@@ -753,7 +753,7 @@ function showGamePopup(name) {
               return;
           }
 
-          results.slice(0, 4).forEach(result => {
+          results.slice(0, 6).forEach(result => {
               const name = result?.conceptProductMetadata?.name || 'Unknown';
               const imageUrl = result?.conceptProductMetadata?.media?.images?.[0]?.url;
               const videoUrl = result?.conceptProductMetadata?.media?.videos?.[0]?.url || '';
@@ -767,7 +767,7 @@ function showGamePopup(name) {
                       <h3>${name}</h3>
                   `;
                   gameCard.querySelector('.clickable-image').addEventListener('click', () => {
-                      playVideoInFullscreen(videoUrl, gameCard, name);
+                      window.open(videoUrl, "_blank");
                   });
               } else {
                   gameCard.innerHTML = `
@@ -784,7 +784,7 @@ function showGamePopup(name) {
       });
 }
 
-// Function to close the popup
+// Function to close the game popup overlay
 function closeGamePopup() {
   document.getElementById("game-popup").style.display = "none";
 }
@@ -799,22 +799,15 @@ function handleVoiceCommand(response) {
   }
 }
 
-// Listening for WebSocket messages
+// Listening for WebSocket messages (assume `socket` is defined elsewhere)
 socket.onmessage = (event) => {
   console.log("Message received from server:", event.data);
   const response = JSON.parse(event.data).response;
   handleVoiceCommand(response);
 };
 
-// Function to play video in fullscreen
-function playVideoInFullscreen(videoUrl, gameCard, gameName) {
-  const videoElement = document.createElement("video");
-  videoElement.src = videoUrl;
-  videoElement.controls = true;
-  videoElement.autoplay = true;
-  videoElement.style.width = "100%";
-  videoElement.style.borderRadius = "10px";
-
-  gameCard.innerHTML = `<h3>${gameName}</h3>`;
-  gameCard.appendChild(videoElement);
-}
+// Event listener for changing results count dynamically
+document.getElementById("resultCount").addEventListener("change", function() {
+  const name = document.getElementById("gameNamePopup").innerText;
+  showGamePopup(name);
+});
