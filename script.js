@@ -739,50 +739,191 @@ function showGamePopup(name) {
   document.getElementById("game-popup").style.display = "flex";
 
   // API call to fetch game data
-  const endpoint = `https://search.e1-np.api.playstation.com/v1/universalSearch?searchTerm=${name}&countryCode=US&languageCode=en&age=99&pageSize=8`;
+  const endpoint = `https://search.e1-np.api.playstation.com/v1/universalSearch?searchTerm=${name}&countryCode=US&languageCode=en&age=99&suggestionSize=10&pageSize=8&boostIsEntitledToFactor=MODERATE&boostMutualFriendsCountFactor=MODERATE&boostTitleIdsFactor=MODERATE&boostTitleIds=&searchDomains=ConceptGameWeb&blendedContext=&socialStrictGrouping=&preferredMediaPartnerTitleIds=&preferredMediaPartnerName=&preferredMediaContentType=&preferredGameService=&isOpenIntent=true&searchContext=Unknown&explain=&isChildRestricted=&strandSize=&strandOffset=&facets=&discountBrands=`;
 
   fetch(endpoint)
-      .then(response => response.json())
-      .then(data => {
-          const results = data?.domainResponses?.[0]?.results || [];
-          const popupContent = document.getElementById("popup-content");
-          popupContent.innerHTML = '';
+  .then(response => response.json())
+  .then(data => {
+      const results = data?.domainResponses?.[0]?.results || [];
+      const popupContent = document.getElementById("popup-content");
+      popupContent.innerHTML = '';
 
-          if (results.length === 0) {
-              popupContent.innerHTML = '<p>No results available.</p>';
-              return;
+      if (results.length === 0) {
+          popupContent.innerHTML = '<p>No results available.</p>';
+          return;
+      }
+
+      // Filter out results without images
+      const filteredResults = results.filter(
+          result => result?.conceptProductMetadata?.media?.images?.[0]?.url
+      );
+
+      // Sort results: videos first, then images
+      const sortedResults = filteredResults.sort((a, b) => {
+          const aHasVideo = a?.conceptProductMetadata?.media?.videos?.[0]?.url ? 1 : 0;
+          const bHasVideo = b?.conceptProductMetadata?.media?.videos?.[0]?.url ? 1 : 0;
+          return bHasVideo - aHasVideo; // Videos come first
+      });
+
+      if (sortedResults.length === 0) {
+          popupContent.innerHTML = '<p>No results available with valid images.</p>';
+          return;
+      }
+
+      // Limit results to the top 3
+      sortedResults.slice(0, 3).forEach(result => {
+          const name = result?.conceptProductMetadata?.name || 'Unknown';
+          const imageUrl = result?.conceptProductMetadata?.media?.images?.[0]?.url;
+          const videoUrl = result?.conceptProductMetadata?.media?.videos?.[0]?.url || '';
+
+          const gameCard = document.createElement("div");
+          gameCard.classList.add("game-card");
+
+          if (videoUrl) {
+              // Display video results
+              gameCard.innerHTML = `
+                  <img src="${imageUrl}" alt="${name}" class="clickable-image" style="cursor: pointer;">
+                  <h3>${name}</h3>
+              `;
+              gameCard.querySelector('.clickable-image').addEventListener('click', () => {
+                  window.open(videoUrl, "_blank");
+              });
+          } else {
+              // Display results with only images
+              gameCard.innerHTML = `
+                  <img src="${imageUrl}" alt="${name}">
+                  <h3>${name}</h3>
+              `;
           }
 
-          results.slice(0, 6).forEach(result => {
-              const name = result?.conceptProductMetadata?.name || 'Unknown';
-              const imageUrl = result?.conceptProductMetadata?.media?.images?.[0]?.url;
-              const videoUrl = result?.conceptProductMetadata?.media?.videos?.[0]?.url || '';
-
-              const gameCard = document.createElement("div");
-              gameCard.classList.add("game-card");
-
-              if (videoUrl) {
-                  gameCard.innerHTML = `
-                      <img src="${imageUrl}" alt="${name}" class="clickable-image" style="cursor: pointer;">
-                      <h3>${name}</h3>
-                  `;
-                  gameCard.querySelector('.clickable-image').addEventListener('click', () => {
-                      window.open(videoUrl, "_blank");
-                  });
-              } else {
-                  gameCard.innerHTML = `
-                      <img src="${imageUrl}" alt="${name}">
-                      <h3>${name}</h3>
-                  `;
-              }
-              popupContent.appendChild(gameCard);
-          });
-      })
-      .catch(error => {
-          console.error('Error fetching game data:', error);
-          document.getElementById("popup-content").innerHTML = '<p style="color: red;">Failed to load games.</p>';
+          popupContent.appendChild(gameCard);
       });
+  })
+  .catch(error => {
+      console.error('Error fetching game data:', error);
+      document.getElementById("popup-content").innerHTML = '<p style="color: red;">Failed to load games.</p>';
+  });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function openVideoInTemporaryTab(videoUrl) {
+  // Open a new tab
+  const videoWindow = window.open('', '_blank', 'width=800,height=600');
+
+  if (videoWindow) {
+      // Embed the video in the new tab
+      videoWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <title>Video Player</title>
+              <style>
+                  body {
+                      margin: 0;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                      background-color: black;
+                  }
+                  video {
+                      width: 100%;
+                      height: auto;
+                  }
+              </style>
+          </head>
+          <body>
+              <video id="video" controls autoplay>
+                  <source src="${videoUrl}" type="video/mp4">
+                  Your browser does not support the video tag.
+              </video>
+              <script>
+                  const video = document.getElementById('video');
+                  video.addEventListener('ended', () => {
+                      window.close();
+                  });
+              </script>
+          </body>
+          </html>
+      `);
+
+      videoWindow.document.close(); // Ensure the document is properly written
+  } else {
+      alert('Unable to open video. Please allow popups for this site.');
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Function to close the game popup overlay
 function closeGamePopup() {
