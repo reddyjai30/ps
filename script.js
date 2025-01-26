@@ -500,6 +500,33 @@ function initializeWebSocket() {
         console.log("Message received from server:", event.data);
         const response = JSON.parse(event.data).response;
 
+
+
+
+
+
+
+
+
+        if (response.toLowerCase().includes("opening")) { 
+          // Extract the name after 'opening' in the response
+          const match = response.toLowerCase().match(/opening\s+(.+)/);
+
+          // const match = serverMessage.response.toLowerCase().match(/opening (.+)/);
+          console.log(match)
+
+          if (match) {
+                  const name = match[1]||match[1][1]; // Capture the name (e.g., "gopi")
+                  console.log(name)
+                  window.open(`search.html?name=${name}`,"_blank");
+           }
+}
+
+
+
+
+
+
         hideLoader();
         handleGreetingResponse(response);
         handleTTSResponse(response);
